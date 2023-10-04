@@ -3,3 +3,6 @@ postgres-data/**
 csvs/**
 skips/**
 Ratings
+!postgres-data
+!csvs
+!skips
