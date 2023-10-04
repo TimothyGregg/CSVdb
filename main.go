@@ -77,6 +77,18 @@ func main() {
 		PORT:                    os.Getenv("LOCAL_DATABASE_PORT"),
 	}
 
+	// Create csvs dir if not exists
+	bool, err := exists("./csvs")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !bool {
+		if err := os.Mkdir("./csvs", os.ModePerm); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Please place csvs in ./csvs directory for loading. Current separator is char [" + fmt.Sprint(int(SEPARATOR)) + "]")
+		return
+	}
 	// Import the CSVs
 	err = filepath.Walk("./csvs",
 		func(path string, info os.FileInfo, err error) error {
@@ -228,6 +240,17 @@ func get_csv_for_pg(filename string) csv_file_for_pg {
 	regex_float, _ := regexp.Compile(`^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$`)
 	regex_timestamp, _ := regexp.Compile(`([0-9]+(/[0-9]+)+)`)
 
+	// Create skips dir if not exists
+	bool, err := exists("./skips")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !bool {
+		if err := os.Mkdir("./skips", os.ModePerm); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	// Open file for errored lines
 	skipped_file, err := os.OpenFile("./skips/"+fmt.Sprint(time.Now().UnixMicro())+"_skipped", os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
@@ -318,4 +341,16 @@ func next_row(reader *csv.Reader, target *[]string) error {
 	var err error
 	*target, err = reader.Read()
 	return err
+}
+
+// Check folder existence
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
