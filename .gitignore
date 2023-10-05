@@ -2,6 +2,7 @@
 postgres-data/**
 csvs/**
 skips/**
+util
 Ratings
 !postgres-data
 !csvs
