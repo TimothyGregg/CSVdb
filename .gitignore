@@ -5,6 +5,7 @@ skips/**
 util
 Ratings
 .DS_Store
+help.txt
 !postgres-data
 !csvs
 !skips
