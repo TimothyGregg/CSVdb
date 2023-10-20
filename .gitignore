@@ -4,6 +4,7 @@ csvs/**
 skips/**
 util
 Ratings
+.DS_Store
 !postgres-data
 !csvs
 !skips
