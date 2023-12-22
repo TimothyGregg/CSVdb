@@ -142,10 +142,10 @@ func Gimme_Dat(filename string, output chan string, signal chan bool) {
 
 	// Drop any existing table with the same name
 	signal <- true
-	output <- `DROP TABLE IF EXISTS ` + content.name + `;`
+	output <- `DROP TABLE IF EXISTS "` + content.name + `";`
 
 	// Create the table
-	out := `CREATE TABLE IF NOT EXISTS ` + content.name + `(` + content.name + `_uid serial PRIMARY KEY, my_created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),`
+	out := `CREATE TABLE IF NOT EXISTS "` + content.name + `"("` + content.name + `_uid" serial PRIMARY KEY, my_created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),`
 	for n, header := range content.headers {
 		out += header + ` ` + fmt.Sprint(content.types[n]) + `,`
 	}
@@ -155,7 +155,7 @@ func Gimme_Dat(filename string, output chan string, signal chan bool) {
 
 	// Add the Data
 	for _, row := range content.rows {
-		front := `INSERT INTO ` + content.name + ` (`
+		front := `INSERT INTO "` + content.name + `" (`
 		back := ` Values (`
 		for n, header := range content.headers {
 			if row[header] == "" {
